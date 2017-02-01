@@ -1,0 +1,34 @@
+version: '2'
+services:
+    nginx:
+        build: ./nginx
+        ports: 
+            - 8000:80
+        links: 
+            - web:app
+        networks:
+            - nodeapp-network
+    mongodb:
+        image: mongo
+        volumes:
+            - data:/data/db
+        ports:
+            - 27017:27017
+        networks:
+            - nodeapp-network
+    web:
+        build: .
+        volumes:
+            - .:/var/app
+        ports:
+            - '3000:3000'
+        networks:
+            - nodeapp-network
+
+volumes:
+    data:
+        driver: local
+
+networks:
+    nodeapp-network:
+        driver: bridge
